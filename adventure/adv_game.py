@@ -1,7 +1,9 @@
 import random
 from abc import ABC, abstractmethod
 from enum import Enum
-from adventure.random_item_selector import RandomItemSelector
+from typing import Generic, Iterable, List, Optional, TypeVar
+
+T = TypeVar("T")
 
 
 class EncounterOutcome(Enum):
@@ -44,15 +46,15 @@ sense_exp = [
 ]
 
 # This class is designed to manage a collection of items, allowing for random selection without repetition until all items have been used. It can be useful in scenarios where you want to present unique options or clues to the player in an adventure game.
-class RandomItemSelector:
-    def __init__(self, items):
-        self.items = list(items) if items is not None else []
-        self.used_items = []
+class RandomItemSelector(Generic[T]):
+    def __init__(self, items: Optional[Iterable[T]] = None) -> None:
+        self.items: List[T] = list(items) if items is not None else []
+        self.used_items: List[T] = []
 
-    def add_item(self, item):
+    def add_item(self, item: T) -> None:
         self.items.append(item)
 
-    def pull_random_item(self):
+    def pull_random_item(self) -> Optional[T]:
         if not self.items:
             self.reset()
             return None
@@ -66,12 +68,14 @@ class RandomItemSelector:
         self.used_items.append(selected)
         return selected
 
-    def reset(self):
+    def reset(self) -> None:
         self.used_items.clear()
 
 
 class SenseClueGenerator:
     _instance = None
+    clue_selector: RandomItemSelector[str]
+    sense_selector: RandomItemSelector[str]
 
     def __new__(cls):
         if cls._instance is None:
@@ -202,11 +206,11 @@ class BlueWizard(Encounter):
 
 class Room:
        
-    def __init__(self, name, encounter):
-        self.name = name
-        self.encounter = encounter
+    def __init__(self, name: str, encounter: Encounter) -> None:
+        self.name: str = name
+        self.encounter: Encounter = encounter
 
-    def visit_room(self):
+    def visit_room(self) -> EncounterOutcome:
         return self.encounter.run_encounter()
 
 # This is a list of rooms that can be explored in the adventure game. Each room has a name and an associated encounter that defines what happens when the player visits that room. The encounters can provide clues, sensory experiences, or lead to the discovery of treasure.
@@ -227,7 +231,7 @@ rooms.append(Room("The Red Wizard’s Lair", RedWizard()))
 rooms.append(Room("The Blue Wizard’s Lair", BlueWizard()))
 
 class Castle:
-    def __init__(self, rooms):
+    def __init__(self, rooms: List[Room]) -> None:
         self.room_selector = RandomItemSelector(rooms)
 
     def select_door(self):
@@ -269,7 +273,7 @@ class Castle:
 
 
 class Game:
-    def __init__(self, rooms):
+    def __init__(self, rooms: List[Room]) -> None:
         self.castle = Castle(rooms)
 
     def play_game(self):
