@@ -28,7 +28,7 @@ def get_computer_choice():
     return random.choice(CHOICES)
 
 
-def determine_winner(player, computer):
+def determine_winner(player: str, computer: str) -> str | None:
     if player == computer:
         return None
     if (player, computer) in RULES:
@@ -36,7 +36,7 @@ def determine_winner(player, computer):
     return "computer"
 
 
-def describe_result(winner_choice, loser_choice):
+def describe_result(winner_choice: str, loser_choice: str) -> str:
     action = RULES.get((winner_choice, loser_choice))
     if action:
         return f"{winner_choice.capitalize()} {action} {loser_choice}."
