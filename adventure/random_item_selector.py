@@ -1,12 +1,13 @@
 import random
+from typing import Any, Iterable, Optional
 
 
 class RandomItemSelector:
-    def __init__(self, items):
-        self.items = list(items) if items is not None else []
-        self.used_items = []
+    def __init__(self, items: Optional[Iterable[Any]]):
+        self.items: list[Any] = list(items) if items is not None else []
+        self.used_items: list[Any] = []
 
-    def add_item(self, item):
+    def add_item(self, item: Any) -> None:
         self.items.append(item)
 
     def pull_random_item(self):
