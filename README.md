@@ -60,6 +60,22 @@ Open a terminal in the repository root and run one of the games:
 
 > Note: Depending on your Python setup, you may need to use `python3` instead of `python`.
 
+## Running tests
+
+This project uses `pytest` for unit testing.
+
+1. Install pytest if needed:
+   - `pip install pytest`
+2. Run all tests from the repository root:
+   - `pytest`
+3. Run a single test file:
+   - `pytest tests/test_adv_game.py`
+
+The `tests/` folder contains:
+- `test_random_item_selector.py`: tests for the reusable `RandomItemSelector` helper.
+- `test_rpsls.py`: tests for the Rock Paper Scissors Lizard Spock game logic.
+- `test_adv_game.py`: tests for the adventure game encounter logic and basic room behavior.
+
 ## Learning opportunities
 
 This repository is ideal for practicing:
